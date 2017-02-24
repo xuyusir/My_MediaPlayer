@@ -1,6 +1,10 @@
 package yuyu.mymedia;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.provider.MediaStore;
+import android.util.Log;
 import  android.widget.*;
 import  android.os.*;
 import  java.util.*;
@@ -25,10 +29,17 @@ public class MyListView extends Activity {
     private List<String> getData(){
 
         List<String> data = new ArrayList<String>();
-        data.add("测试数据1");
-        data.add("测试数据2");
-        data.add("测试数据3");
-        data.add("测试数据4");
+
+        ContentResolver c=getContentResolver();
+        Cursor cur = c.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null,
+                null, null,null);
+        int num=cur.getCount();
+        cur.moveToFirst();
+        for (int i=0;i<num;i++){
+            String datapath=cur.getString(cur.getColumnIndex(MediaStore.Video.Media.DATA));
+            data.add(datapath);
+            cur.moveToNext();
+        }
 
         return data;
     }
