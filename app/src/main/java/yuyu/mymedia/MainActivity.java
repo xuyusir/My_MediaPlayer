@@ -27,6 +27,9 @@ public class MainActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent=getIntent();
+        final String datapath=intent.getStringExtra("datap");
+        Toast.makeText(getApplicationContext(), "get ok please click play",Toast.LENGTH_SHORT).show();
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
         final int pw= metric.widthPixels;     // 屏幕宽度（像素）
@@ -50,7 +53,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 try {
-                    mp.setDataSource("/storage/1D98-0641/2.mp4");
+                    mp.setDataSource(datapath);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -80,6 +83,7 @@ public class MainActivity extends Activity {
                     String datapath=cur.getString(cur.getColumnIndex(MediaStore.Video.Media.DATA));
                     cur.moveToNext();
                     Log.e("TAG", datapath);
+
                 }
             }
         });

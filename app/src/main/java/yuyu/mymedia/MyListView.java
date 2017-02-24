@@ -2,9 +2,11 @@ package yuyu.mymedia;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import  android.widget.*;
 import  android.os.*;
 import  java.util.*;
@@ -24,6 +26,18 @@ public class MyListView extends Activity {
         listView = new ListView(this);
         listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,getData()));
         setContentView(listView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(MyListView.this,MainActivity.class);
+                intent.putExtra("datap",getData().get(position));
+                startActivity(intent);
+            }
+        });
+
+
+
+
     }
 
     private List<String> getData(){
@@ -43,4 +57,6 @@ public class MyListView extends Activity {
 
         return data;
     }
+
+
 }
