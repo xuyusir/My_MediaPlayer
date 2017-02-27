@@ -27,12 +27,26 @@ public class MainActivity extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(metric);
         final int pw= metric.widthPixels;     // 屏幕宽度（像素）
         final int ph = metric.heightPixels;   // 屏幕高度（像素）
+
         mp=new MediaPlayer();
         sv=(SurfaceView)findViewById(R.id.surfaceView);
         Button play=(Button)findViewById(R.id.play);
-        Button select=(Button)findViewById(R.id.select_media);
+        Button select=(Button)findViewById(R.id.select);
         final Button pause=(Button)findViewById(R.id.pause);
         Button stop=(Button)findViewById(R.id.stop);
+        RelativeLayout.LayoutParams b= new RelativeLayout.LayoutParams(pw/4,(int)(ph*(1)/10));
+        select.setWidth(pw/4);
+        select.setHeight((int)(ph*(0.5)/10));
+        play.setWidth(pw/4);
+        play.setHeight((int)(ph*(0.5)/10));
+        pause.setWidth(pw/4);
+        pause.setHeight((int)(ph*(0.5)/10));
+        stop.setWidth(pw/4);
+        stop.setHeight((int)(ph*(0.5)/10));
+        RelativeLayout.LayoutParams rl= new RelativeLayout.LayoutParams(pw,(int)(ph*(8.5)/10));
+        rl.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        sv.setLayoutParams(rl);
+
 
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -60,7 +74,8 @@ public class MainActivity extends Activity {
                     e.printStackTrace();
                 }
 
-                RelativeLayout.LayoutParams rl= new RelativeLayout.LayoutParams(mp.getVideoWidth(),mp.getVideoHeight());
+
+                RelativeLayout.LayoutParams rl= new RelativeLayout.LayoutParams(pw,(int)(ph*(8.5)/10));
                 rl.addRule(RelativeLayout.CENTER_HORIZONTAL);
                 sv.setLayoutParams(rl);
 
