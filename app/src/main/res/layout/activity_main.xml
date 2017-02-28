@@ -48,4 +48,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:max="100"
+        android:progress="1"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar2"
+        android:layout_above="@+id/stop"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
