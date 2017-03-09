@@ -51,6 +51,7 @@ public class Surfaceview extends AppCompatActivity {
         final LinearLayout linearLayout=(LinearLayout)findViewById(R.id.test);
         mp=new MediaPlayer();
         final Button bplay=(Button)findViewById(R.id.play);
+        bplay.setText("pause");
         Button bbefore=(Button)findViewById(R.id.before);
         Button bnext=(Button)findViewById(R.id.next);
         final SeekBar seekbar=(SeekBar)findViewById(R.id.seekbar);
@@ -71,6 +72,8 @@ public class Surfaceview extends AppCompatActivity {
         }
 
         mp.start();
+
+
 
 
         timer.schedule(new TimerTask() {
@@ -108,9 +111,11 @@ public class Surfaceview extends AppCompatActivity {
                 seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
+
                     }
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
@@ -121,6 +126,9 @@ public class Surfaceview extends AppCompatActivity {
                         mp.pause();
                         mp.seekTo(j);
                         mp.start();
+                        mHandler.removeCallbacks(mRunnable);
+                        linearLayout.setVisibility(View.VISIBLE);
+                        mHandler.postDelayed(mRunnable,4000);
                     }
                 });
 
@@ -137,9 +145,13 @@ public class Surfaceview extends AppCompatActivity {
                  bplay.setText("pause");
 
                }
+                mHandler.removeCallbacks(mRunnable);
+                linearLayout.setVisibility(View.VISIBLE);
+                mHandler.postDelayed(mRunnable,4000);
 
             }
         });
+
 
   }
 
