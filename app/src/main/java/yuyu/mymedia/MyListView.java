@@ -1,11 +1,11 @@
 package yuyu.mymedia;
 
-import android.app.Activity;
+
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import  android.widget.*;
 import  android.os.*;
@@ -16,32 +16,30 @@ import  java.util.*;
  * Created by yuyu on 2017/2/24.
  */
 
-public class MyListView extends Activity {
+public class MyListView extends AppCompatActivity {
     private ListView listView;
-    //private List<String> data = new ArrayList<String>();
+    private List<String> data = new ArrayList<String>();
     @Override
     public void onCreate(Bundle savedInstanceState){
-
         super.onCreate(savedInstanceState);
         listView = new ListView(this);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,getData()));
+        data=getData();
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,data));
         setContentView(listView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(MyListView.this,MainActivity.class);
-                intent.putExtra("datap",getData().get(position));
+                Intent intent=new Intent(MyListView.this,Surfaceview.class);
+                intent.putExtra("datap",data.get(position));
                 startActivity(intent);
-                Toast.makeText(getApplicationContext(), "get ok please click play",Toast.LENGTH_SHORT).show();
                 finish();
+
             }
         });
-
     }
 
     private List<String> getData(){
-
         List<String> data = new ArrayList<String>();
         ContentResolver c=getContentResolver();
         Cursor cur = c.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null,
@@ -55,5 +53,4 @@ public class MyListView extends Activity {
         }
         return data;
     }
-
 }
