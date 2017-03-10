@@ -1,7 +1,11 @@
 package yuyu.mymedia;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -14,6 +18,7 @@ import  android.content.Intent;
 import  android.widget.*;
 import  java.io.*;
 import java.util.*;
+import  android.view.View.OnClickListener;
 
 
 public class Surfaceview extends AppCompatActivity {
@@ -21,6 +26,26 @@ public class Surfaceview extends AppCompatActivity {
     SurfaceView sv;
     Handler mHandler;
     Runnable mRunnable;
+    List<String> L1;
+    String data=new String();
+
+
+
+
+    private List<String> getData(){
+        List<String> data = new ArrayList<String>();
+        ContentResolver c=getContentResolver();
+        Cursor cur = c.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null,
+                null, null,null);
+        int num=cur.getCount();
+        cur.moveToFirst();
+        for (int i=0;i<num;i++){
+            String datapath=cur.getString(cur.getColumnIndex(MediaStore.Video.Media.DATA));
+            data.add(datapath);
+            cur.moveToNext();
+        }
+        return data;
+    }
 
 
     @Override
@@ -29,13 +54,18 @@ public class Surfaceview extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.surfacexml);
         Intent intent=this.getIntent();
-        final String datapath=intent.getStringExtra("datap");
+        String datap=intent.getStringExtra("datap");
+        data=datap;
+
+
         sv=(SurfaceView)findViewById(R.id.surfaceView2);
         final SurfaceHolder holder=sv.getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
                 mp.setDisplay(holder);
+                mHandler.removeCallbacks(mRunnable);
+                mHandler.postDelayed(mRunnable,4000);
             }
 
             @Override
@@ -58,8 +88,9 @@ public class Surfaceview extends AppCompatActivity {
         mHandler= new Handler();
         Timer timer=new Timer();
 
+
         try {
-            mp.setDataSource(datapath);
+            mp.setDataSource(datap);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,6 +103,7 @@ public class Surfaceview extends AppCompatActivity {
         }
 
         mp.start();
+
 
 
 
@@ -132,6 +164,8 @@ public class Surfaceview extends AppCompatActivity {
                     }
                 });
 
+
+
         bplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,6 +187,82 @@ public class Surfaceview extends AppCompatActivity {
         });
 
 
+        bbefore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s=new String();
+                int i;
+                int q=0;
+               L1=getData();
+               i= L1.size();
+                while (q<i){
+
+                    if (L1.get(q).equals(data)) {
+                        if (q == 0) {
+                            break;
+                        } else {
+                            mp.reset();
+                            s = L1.get(q - 1);
+                            try {
+                                mp.setDataSource(s);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                mp.prepare();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            mp.start();
+                            data=s;
+                            break;
+                        }
+                    }
+                    else {
+                        q++;
+                    }
+                }
+            }
+        });
+
+        bnext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s=new String();
+                int i;
+                int q=0;
+                L1=getData();
+                i= L1.size();
+                while (q<i){
+
+                    if (L1.get(q).equals(data)) {
+                        if (q == i-1) {
+                            break;
+                        } else {
+                            mp.reset();
+                            s = L1.get(q + 1);
+                            try {
+                                mp.setDataSource(s);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                mp.prepare();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            mp.start();
+                            data=s;
+                            break;
+                        }
+                    }
+                    else {
+                        q++;
+                    }
+                }
+
+            }
+        });
   }
 
 }
